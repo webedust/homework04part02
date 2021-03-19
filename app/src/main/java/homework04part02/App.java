@@ -3,12 +3,47 @@
  */
 package homework04part02;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
+import com.google.common.graph.GraphBuilder;
+import com.google.common.graph.MutableGraph;
+
+public class App
+{
+    public static void main(String[] args)
+    {
+        // Create array of people
+        // Load people file and set it to array.
+        Creator creator = new Creator();
+        Person[] people = creator.create();
+
+        // Create graph
+        MutableGraph<Person> graph = GraphBuilder.undirected().build();
+
+        // Create integers for counting relationships
+        int marriages = 0, siblings = 0, children = 0, parents = 0;
+
+        // Visit and print all relationships.
+        PersonVisitorClass visitor = new PersonVisitorClass();
+        for (Person person : people)
+        {
+            visitor.visit(person);
+            visitor.graph(person, graph);
+            visitor.countRelationships(person, marriages, siblings, children, parents);
+        }
+
+        // Print # of relationship occurrences
+        printRelationshipsTable(marriages, siblings, children, parents);
     }
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+    private static void printRelationshipsTable(int marriages, int siblings, int children, int parents)
+    {
+        System.out.print
+                (
+                        "Relationship Type\tCount\n" +
+                        "-----------------\t-----\n" +
+                        "Marriages\t\t\t\t" + marriages + "\n" +
+                        "Children\t\t\t\t" + children + "\n" +
+                        "Siblings\t\t\t\t" + siblings + "\n" +
+                        "Parents\t\t\t\t\t" + parents
+                );
     }
 }
